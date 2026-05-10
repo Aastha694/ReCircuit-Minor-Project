@@ -12,6 +12,7 @@ import rateLimit from 'express-rate-limit';
 import uploadRoutes from './routes/upload.js';
 import buyerRoutes from './routes/buyers.js';
 import submissionRoutes from './routes/submissions.js';
+import { clerkAuth } from './middlewares/auth.js';
 
 dotenv.config();
 
@@ -50,6 +51,9 @@ const limiter = rateLimit({
   message: 'Too many requests, please try again later.',
 });
 app.use('/api', limiter);
+
+// Apply Clerk Auth globally to parse tokens on all requests
+app.use(clerkAuth);
 
 // Serve uploaded files statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

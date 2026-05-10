@@ -39,6 +39,6 @@ const upload = multer({
 const router = express.Router();
 
 // POST /api/upload — upload image, classify, match buyers
-router.post('/', clerkAuth, protectRoute, upload.single('image'), handleUpload);
+router.post('/', protectRoute, upload.single('image'), handleUpload);
 
 export default router;
