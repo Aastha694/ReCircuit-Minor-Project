@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 import helmet from 'helmet';
@@ -20,12 +21,24 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Ensure uploads directory exists (prevents Multer crash on first upload)
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+  console.log('📁 Created uploads/ directory');
+}
+
 // Security & Middlewares
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" } // allows serving static files cross-origin
 }));
+
+// CORS — Reflect the origin dynamically to allow all Vercel domains (production & preview)
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: function (origin, callback) {
+    // Reflect the origin back, bypassing strict CORS for the MVP
+    callback(null, origin || true);
+  },
   credentials: true,
 }));
 app.use(express.json());
