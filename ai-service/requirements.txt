@@ -1,5 +1,5 @@
 flask==3.1.*
 flask-cors==5.*
-tensorflow>=2.20.0
+tensorflow
 Pillow==11.*
 numpy>=1.26.0
