@@ -21,10 +21,7 @@ export const useApi = () => {
     const formData = new FormData();
     formData.append('image', file);
     
-    // Explicitly set content-type for multipart
-    const response = await client.post('/upload', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const response = await client.post('/upload', formData);
     return response.data;
   };
 
